@@ -1,0 +1,1290 @@
+
+<!doctype html>
+
+<html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Setup a mail server with Postfix and Dovecot on Ubuntu / Debian</title>
+<link rel="stylesheet" type="text/css" media="all" href="http://www.binarytides.com/blog/wp-content/themes/alltuts/style.css" />
+
+
+
+<!-- All in One SEO Pack 2.3.11.4 by Michael Torbert of Semper Fi Web Design[108,199] -->
+<meta name="description"  content="This tutorial shows you how to install and configure a mail server with Postfix and Dovecot on a Ubuntu or Debian based linux server. Postfix is the SMTP server" />
+
+<link rel="canonical" href="http://www.binarytides.com/install-postfix-dovecot-debian/" />
+<!-- /all in one seo pack -->
+<link rel='dns-prefetch' href='//www.binarytides.com' />
+<link rel="alternate" type="application/rss+xml" title="BinaryTides &raquo; Setup a mail server with Postfix and Dovecot on Ubuntu / Debian Comments Feed" href="http://www.binarytides.com/install-postfix-dovecot-debian/feed/" />
+<link rel='stylesheet' id='yarppWidgetCss-css'  href='http://www.binarytides.com/blog/wp-content/plugins/yet-another-related-posts-plugin/style/widget.css?ver=4.7.4' type='text/css' media='all' />
+<link rel='stylesheet' id='digg-digg-css'  href='http://www.binarytides.com/blog/wp-content/plugins/digg-digg/css/diggdigg-style.css?ver=5.3.6' type='text/css' media='screen' />
+<script type='text/javascript' src='http://www.binarytides.com/blog/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='http://www.binarytides.com/blog/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='http://www.binarytides.com/blog/wp-content/plugins/jquery-image-lazy-loading/js/jquery.lazyload.min.js?ver=1.7.1'></script>
+<link rel='https://api.w.org/' href='http://www.binarytides.com/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.binarytides.com/blog/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://www.binarytides.com/blog/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Send mail from command line with external smtp server on Linux' href='http://www.binarytides.com/linux-mail-with-smtp/' />
+<link rel='next' title='Install the Gnome Flashback classical desktop on Ubuntu 14.10/Linux Mint 17' href='http://www.binarytides.com/install-gnome-flashback-ubuntu/' />
+<meta name="generator" content="WordPress 4.7.4" />
+<link rel='shortlink' href='http://www.binarytides.com/?p=7426' />
+<link rel="alternate" type="application/json+oembed" href="http://www.binarytides.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fwww.binarytides.com%2Finstall-postfix-dovecot-debian%2F" />
+<link rel="alternate" type="text/xml+oembed" href="http://www.binarytides.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fwww.binarytides.com%2Finstall-postfix-dovecot-debian%2F&#038;format=xml" />
+
+<!-- Schema.org markup for Google+ --> 
+<meta itemprop="name" content="Setup a mail server with Postfix and Dovecot on Ubuntu / Debian"> 
+<meta itemprop="description" content="This tutorial shows you how to install and configure a mail server with Postfix and Dovecot on a Ubuntu or Debian based linux server. Postfix is the SMTP server and Dovecot is the IMAP/POP server.">
+<meta itemprop="image" content="http://www.binarytides.com/blog/wp-content/uploads/2014/12/postfix-mail-server.png">
+
+
+<!-- Open Graph data -->
+<meta property="og:title" content="Setup a mail server with Postfix and Dovecot on Ubuntu / Debian" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://www.binarytides.com/install-postfix-dovecot-debian/" />
+<meta property="og:image" content="http://www.binarytides.com/blog/wp-content/uploads/2014/12/postfix-mail-server.png">
+<meta property="og:description" content="This tutorial shows you how to install and configure a mail server with Postfix and Dovecot on a Ubuntu or Debian based linux server. Postfix is the SMTP server and Dovecot is the IMAP/POP server.">
+<meta property="og:site_name" content="BinaryTides" />
+
+<!-- Twitter Card data -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@binarytides">
+<meta name="twitter:creator" content="@binarytides">
+<meta name="twitter:title" content="Setup a mail server with Postfix and Dovecot on Ubuntu / Debian">
+<meta name="twitter:description" content="This tutorial shows you how to install and configure a mail server with Postfix and Dovecot on a Ubuntu or Debian based linux server. Postfix is the SMTP server and Dovecot is the IMAP/POP server.">
+<meta name="twitter:creator" content="@binarytides">
+<!-- Twitter summary card with large image must be at least 280x150px -->
+
+<meta name="twitter:image" content="http://www.binarytides.com/blog/wp-content/uploads/2014/12/postfix-mail-server.png">
+	<meta name="google-site-verification" content="raSOdoQJjGURKn_sXYoe_n3Zqslc-LFFapomtBs69nY" />
+
+<!-- google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-2702' + '686-20', 'auto');
+
+  ga('send', 'pageview');
+
+</script>
+
+<!-- Google Plus Publisher Markup -->
+<link href="https://plus.google.com/+binarytides" rel="publisher"/><style type='text/css'>
+img.lazy { display: none; }
+</style>
+<script type="text/javascript">
+	window._wp_rp_static_base_url = 'https://wprp.zemanta.com/static/';
+	window._wp_rp_wp_ajax_url = "http://www.binarytides.com/blog/wp-admin/admin-ajax.php";
+	window._wp_rp_plugin_version = '3.6.3';
+	window._wp_rp_post_id = '7426';
+	window._wp_rp_num_rel_posts = '6';
+	window._wp_rp_thumbnails = true;
+	window._wp_rp_post_title = 'Setup+a+mail+server+with+Postfix+and+Dovecot+on+Ubuntu+%2F+Debian';
+	window._wp_rp_post_tags = ['dovecot', 'pop', 'imap', 'postfix', 'mail+server', 'debian', 'smtp', 'ubuntu', 'silver', 'system', 'show', 'tutori', 'mail', 'password', 'ubuntu', 'domain', 'strategi', 'linux', 'unix', 'incom', 'server', 'debian', 'a'];
+	window._wp_rp_promoted_content = true;
+</script>
+<link rel="stylesheet" href="http://www.binarytides.com/blog/wp-content/plugins/wordpress-23-related-posts-plugin/static/themes/modern.css?version=3.6.3" />
+<style type="text/css" id="syntaxhighlighteranchor"></style>
+
+<link href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css' />
+<link href='http://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Bevan' rel='stylesheet' type='text/css'>
+
+</head>
+<body>
+
+<!-- Begin #wrapper -->
+<div id="wrapper">
+	<!-- Begin #header -->
+	<div id="header">
+	<div id="header2">
+	<div id="logo"><a href="http://www.binarytides.com/">BinaryTides</a></div>
+<div id="tagline">Genuine how-to guides on Linux, Ubuntu and FOSS</div>
+		<!-- Begin #topMenuRight -->
+			<div id="topMenuRight">
+			
+			</div>
+		<!-- End #topMenuRight -->
+	</div>
+	</div>
+	<!-- End #header -->
+
+
+
+	<!-- Begin #nav_menu -->
+	<div id="nav_menu">
+	<div id="nav_menu_contents">
+	<!-- Begin #topMenu -->
+	<div id="topMenu" class="ddsmoothmenu"><ul id="menu-header-navigation" class="menu"><li id="menu-item-7601" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-7601"><a href="http://www.binarytides.com/">Home</a></li>
+<li id="menu-item-7528" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7528"><a href="http://www.binarytides.com/category/apps/">Apps</a></li>
+<li id="menu-item-7530" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-7530"><a href="http://www.binarytides.com/category/programming/">Coding</a>
+<ul class="sub-menu">
+	<li id="menu-item-7532" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-7532"><a href="http://www.binarytides.com/category/programming/html5-2/">Html5</a>
+	<ul class="sub-menu">
+		<li id="menu-item-7533" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7533"><a href="http://www.binarytides.com/category/programming/html5-2/box2d-game-programming/">Box2d</a></li>
+	</ul>
+</li>
+	<li id="menu-item-7534" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7534"><a href="http://www.binarytides.com/category/programming/javascript/">Javascript</a></li>
+	<li id="menu-item-7531" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7531"><a href="http://www.binarytides.com/category/programming/database/">Database</a></li>
+	<li id="menu-item-7535" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-7535"><a href="http://www.binarytides.com/category/programming/php-tutorials/">PHP</a>
+	<ul class="sub-menu">
+		<li id="menu-item-7536" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7536"><a href="http://www.binarytides.com/category/programming/php-tutorials/php-snippets/">Php Snippets</a></li>
+		<li id="menu-item-7537" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7537"><a href="http://www.binarytides.com/category/programming/php-tutorials/tutorial/">Tutorial</a></li>
+	</ul>
+</li>
+	<li id="menu-item-7538" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-7538"><a href="http://www.binarytides.com/category/programming/sockets/">Socket Programming</a>
+	<ul class="sub-menu">
+		<li id="menu-item-7539" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7539"><a href="http://www.binarytides.com/category/programming/sockets/c-sockets/">C</a></li>
+		<li id="menu-item-7540" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7540"><a href="http://www.binarytides.com/category/programming/sockets/java-sockets-sockets/">Java</a></li>
+		<li id="menu-item-7541" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7541"><a href="http://www.binarytides.com/category/programming/sockets/perl/">Perl</a></li>
+		<li id="menu-item-7542" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7542"><a href="http://www.binarytides.com/category/programming/sockets/php-sockets-sockets/">PHP</a></li>
+		<li id="menu-item-7543" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7543"><a href="http://www.binarytides.com/category/programming/sockets/python-sockets-sockets/">Python</a></li>
+		<li id="menu-item-7544" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7544"><a href="http://www.binarytides.com/category/programming/sockets/winsock-sockets/">Winsock</a></li>
+	</ul>
+</li>
+</ul>
+</li>
+<li id="menu-item-7545" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor menu-item-has-children menu-item-7545"><a href="http://www.binarytides.com/category/distros/">Distros</a>
+<ul class="sub-menu">
+	<li id="menu-item-7546" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7546"><a href="http://www.binarytides.com/category/distros/centos-linux/">CentOS</a></li>
+	<li id="menu-item-7547" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-7547"><a href="http://www.binarytides.com/category/distros/debian-linux/">Debian</a></li>
+	<li id="menu-item-7548" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7548"><a href="http://www.binarytides.com/category/distros/fedora-linux/">Fedora</a></li>
+	<li id="menu-item-7549" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7549"><a href="http://www.binarytides.com/category/distros/linux-mint/">Linux Mint</a></li>
+	<li id="menu-item-7550" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7550"><a href="http://www.binarytides.com/category/distros/opensuse/">openSuse</a></li>
+	<li id="menu-item-7551" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-7551"><a href="http://www.binarytides.com/category/distros/ubuntu-2/">Ubuntu</a></li>
+</ul>
+</li>
+<li id="menu-item-7552" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-7552"><a href="http://www.binarytides.com/category/general/">General</a>
+<ul class="sub-menu">
+	<li id="menu-item-7555" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7555"><a href="http://www.binarytides.com/category/general/freelancing-general/">Freelancing</a></li>
+	<li id="menu-item-7556" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7556"><a href="http://www.binarytides.com/category/general/networking-2/">Networking</a></li>
+	<li id="menu-item-7557" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7557"><a href="http://www.binarytides.com/category/general/virtualbox/">Virtualbox</a></li>
+	<li id="menu-item-7558" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7558"><a href="http://www.binarytides.com/category/general/windows/">Windows</a></li>
+	<li id="menu-item-7559" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7559"><a href="http://www.binarytides.com/category/general/windows/windows-8/">Windows 8</a></li>
+</ul>
+</li>
+<li id="menu-item-7561" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-7561"><a href="http://www.binarytides.com/category/linux/">Linux</a>
+<ul class="sub-menu">
+	<li id="menu-item-7562" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7562"><a href="http://www.binarytides.com/category/linux/hardware/">Hardware</a></li>
+	<li id="menu-item-7563" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7563"><a href="http://www.binarytides.com/category/linux/linux-commands-linux/">Linux Commands</a></li>
+</ul>
+</li>
+<li id="menu-item-7564" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7564"><a href="http://www.binarytides.com/category/reviews/">Reviews</a></li>
+<li id="menu-item-7565" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-has-children menu-item-7565"><a href="http://www.binarytides.com/category/security/">Security</a>
+<ul class="sub-menu">
+	<li id="menu-item-7566" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7566"><a href="http://www.binarytides.com/category/security/burp-suite-hacking-2/">Burp Suite</a></li>
+	<li id="menu-item-7567" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7567"><a href="http://www.binarytides.com/category/security/kali-linux-hacking-2/">Kali Linux</a></li>
+	<li id="menu-item-7568" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7568"><a href="http://www.binarytides.com/category/security/metasploit-hacking-2/">Metasploit</a></li>
+</ul>
+</li>
+<li id="menu-item-7569" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor menu-item-has-children menu-item-7569"><a href="http://www.binarytides.com/category/server-2/">Server</a>
+<ul class="sub-menu">
+	<li id="menu-item-7570" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7570"><a href="http://www.binarytides.com/category/server-2/ftp-server-2/">FTP</a></li>
+	<li id="menu-item-7571" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7571"><a href="http://www.binarytides.com/category/server-2/http-server-2/">Http</a></li>
+	<li id="menu-item-7572" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7572"><a href="http://www.binarytides.com/category/server-2/monitoring/">Monitoring</a></li>
+	<li id="menu-item-7573" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-7573"><a href="http://www.binarytides.com/category/server-2/smtp/">Smtp</a></li>
+</ul>
+</li>
+<li id="menu-item-7574" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-7574"><a href="http://www.binarytides.com/category/super-tips/">Super Tips</a></li>
+</ul></div>			
+	<!-- End #topMenu -->
+	</div>
+	</div>
+	<!-- End #nav_menu -->
+
+
+	<!-- Begin #content -->
+	<div id="content" class="clearfix">	<div id="title">
+
+				<h1>Setup a mail server with Postfix and Dovecot on Ubuntu / Debian</h1>
+
+
+
+<div class="postMetaSingle" style="overflow:hidden;">
+
+<div class="info" style="font-size:90%; float:left;">
+
+	
+	<a class="category" href="http://www.binarytides.com/category/distros/debian-linux/" title="View all posts in Debian">Debian</a> <a class="category" href="http://www.binarytides.com/category/server-2/smtp/" title="View all posts in Smtp">Smtp</a> <a class="category" href="http://www.binarytides.com/category/distros/ubuntu-2/" title="View all posts in Ubuntu">Ubuntu</a>	
+	<!-- author and date -->
+	<span style="margin-left:15px;">By</span> 
+	<span style="color: #07c;">Silver Moon</span> 
+
+	<!-- date -->
+	<span style="margin-left:15px;">On</span> 
+	<span style="color: #07c;">Dec 16, 2014</span>
+	
+	<!-- comments link -->
+	<span style="margin-left:15px;">
+		<a href="http://www.binarytides.com/install-postfix-dovecot-debian/#comments">15 Comments</a>	</span>
+</div>
+<!-- info div close -->	
+
+
+</div>
+
+
+</div>
+
+<div id="colwrap">
+<!-- Begin #colLeft -->
+		<div id="colLeft">
+		<div id="colLeftInner">
+		<!-- Begin .postBox -->
+		<div class="postBox">
+
+			<div class="postBoxMid">
+				<div class="postBoxMidInner first clearfix">
+
+
+
+
+
+
+				
+
+<a id="dd_start"></a><div id='post_start'></div>
+<h3>Mail system for your own domain</h3>
+<p>You have your own domain name and your very own vps/dedicated server and want to use the domain name for emails. So you need to setup a mail server using an smtp server and an imap/pop server.</p>
+<pre class="adflexi"><div class="adcontent">
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- binarytides.com 336x280 post top -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:336px;height:280px"
+     data-ad-client="ca-pub-5814774904969415"
+     data-ad-slot="0700059493"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+</div>
+</pre>
+<p><!-- Time : 7.7962875366211E-5, Pos : 237 --></p>
+<p>This tutorial shows you how to setup <a target="_blank" href="http://www.postfix.org/" >Postfix</a> (smtp server) and Dovecot (imap/pop server). The task of the smtp server is to accept incoming mails and relay outgoing mails from authorised users on the system.</p>
+<p>Whereas Dovecot allows authorized users to access their Inbox and read whatever mails there are.</p>
+<h3>The Simple Configuration - We are not doing this</h3>
+<p>In the simplest kind of configuration for Postfix, just specify your domain name "xyz.com" in the "mydestination" configuration parameter then you shall be able to receive mails for <a class="__cf_email__" href="/cdn-cgi/l/email-protection" data-cfemail="c9baa0a5bfacbb89b1b0b3e7aaa6a4">[email&#160;protected]</a><script data-cfhash='f9e31' type="text/javascript">/* <![CDATA[ */!function(t,e,r,n,c,a,p){try{t=document.currentScript||function(){for(t=document.getElementsByTagName('script'),e=t.length;e--;)if(t[e].getAttribute('data-cfhash'))return t[e]}();if(t&&(c=t.previousSibling)){p=t.parentNode;if(a=c.getAttribute('data-cfemail')){for(e='',r='0x'+a.substr(0,2)|0,n=2;a.length-n;n+=2)e+='%'+('0'+('0x'+a.substr(n,2)^r).toString(16)).slice(-2);p.replaceChild(document.createTextNode(decodeURIComponent(e)),c)}p.removeChild(t)}}catch(u){}}()/* ]]> */</script> if there is a (linux) user named silver on the system. </p>
+<p>This technique is simple but with heavy drawbacks. Firstly you need to create a new unix user account for every new email address we need. </p>
+<p>Secondly the users have to login with their system passwords. So this is not a very flexible strategy to setup mail accounts.</p>
+<p>Separately you can configure Dovecot to read the incoming mails from the directory where Postfix stores them (/var/mail by default). There is an article on DigitalOcean that shows <a target="_blank" href="https://www.digitalocean.com/community/tutorials/how-to-set-up-a-postfix-e-mail-server-with-dovecot" >how to setup postfix with dovecot like that</a>.</p>
+<p>We are going to setup things in a way that you can quickly create email addresses just by writing them in a file along with the password. </p>
+<p>We shall add as many domains as we like and create as many emails and it would all be encrypted and authenticated.</p>
+<pre class="highlight  ">Since the email accounts we shall be creating are not related to any system users or system domains, they are called &quot;virtual users&quot; and &quot;virtual domains&quot;.
+
+Virtual means, that not related to any system specific thing.</pre>
+<h3>How will it work ? - The technical jargon</h3>
+<p>1. All incoming mails destined to your server shall be received by Postfix (SMTP) and then handed over to Dovecot (LMTP) for storing in the Inbox. </p>
+<p>This is better because dovecot's inbuilt lmtp service offers more features like quotas, permissions, flexible directory structures for mailboxes etc. </p>
+<pre class="pre_text" >Incoming mail (From somewhere) -&gt; Postfix (SMTP) -&gt; Dovecot (LMTP) -&gt; MailBox/Inbox</pre>
+<pre class="highlight  ">And due to this Postfix is reduced to just a &quot;tranmission agent&quot; that just moves mails in and out, and nothing else.</pre>
+<pre class="adwrap" style="border:1px solid #ddd; text-align:center; background:#fafafa; white-space:normal; height:90px;">
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- binarytides.com post middle horizontal -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-5814774904969415"
+     data-ad-slot="7125586293"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+</pre>
+<p><!-- Time : 0.00028300285339355 --></p>
+<p>2. All outgoing mails shall be send out by Postfix. But only from authenticated accounts.</p>
+<pre class="pre_text" >Outgoing mail (Thunderbird) -&gt; Postfix (SMTP) -&gt; Destination (SMTP) like gmail</pre>
+<p>3. Dovecot shall provide IMAP/POP services to allow mail clients to read Inbox.</p>
+<pre class="pre_text" >Thunderbird &lt;==&gt; Dovecot (IMAP) &lt;==&gt; Inbox</pre>
+<p>4. Dovecot shall exclusively provide authentication mechanism to Postfix via SASL.<br />
+The email accounts - username + passwords shall be stored in a file.</p>
+<p>If you wish to setup domains and email accounts in a database (instead of a file), then following this <a target="_blank" href="https://www.linode.com/docs/email/postfix/email-with-postfix-dovecot-and-mysql" >tutorial at linode.com</a></p>
+<h3>Setup MX records for domain</h3>
+<p>Before getting any further, ensure that the MX records for your domains that you are going to use with your mail server, are properly set. Most server providers like Linode provide an easy interface to setup zone entries for mx records.</p>
+<p>If your domain is example.com your mx could be mail.example.com for example. Use the dig command to verify -</p>
+<pre class="terminal" ># Find the MX (mail exchange) server
+$ dig MX amazon.com +short
+5 amazon-smtp.amazon.com.
+
+# Find the ip address of the mx server
+$ dig amazon-smtp.amazon.com +short
+207.171.184.25</pre>
+<p>Ensure that the ip address of your MX (mail server) is of that server on which you are going to setup postfix and dovecot.</p>
+<h3>Install and Configure Postfix</h3>
+<p>The first thing to setup is Postfix. Do not forget that in our setup, Postfix is going to transmit all outgoing mails, but for all incoming mails, it would hand them over to Dovecot for storage and later access by email clients.</p>
+<h4>Things to know first</h4>
+<p>1. Postfix logs all its actions in a file called /var/log/mail.log. Check it for useful information and save time diagnosing problems.</p>
+<p>2. The postconf command is the tool to peek inside the configurations of Postfix. It lists out everything in a name=value format linewise. So use the grep command to find whatever needed.</p>
+<p>3. All the Postfix configuration parameters lie in the file /etc/postfix/main.cf<br />
+The parameters are explained in man pages found at - "man 5 postconf"</p>
+<h4>Install Postfix</h4>
+<p>Okay, so if you haven't already done so, install Postfix. Its right there in the repositories so you shouldn't look elsewhere unless you want something newer.</p>
+<pre class="terminal" >$ sudo aptitude install postfix</pre>
+<p>Don't worry, the rest is not going to be that easy. After installing Postfix you may want to check the version. Here is the command to do that.</p>
+<pre class="terminal" >$ postconf mail_version
+mail_version = 2.10.2
+
+$ postconf | grep mail_version
+mail_version = 2.10.2</pre>
+<h4>Configure main.cf</h4>
+<p>In this section we shall configure several things in the Postfix main configuration file located at <b>/etc/postfix/main.cf</b>.</p>
+<p>These include hostnames, parameters for SASL authentication, unix sockets for dovecot lmtp and dovecot sasl authentication service and list of our virtual_mailbox_domains for which Postfix shall be responsible for receiving incoming mails.</p>
+<h4>The tricky parameters !!!</h4>
+<p>The following parameters are the 3 super confusing parameters that you need to understand and configure properly to avoid unexpected problems.</p>
+<pre class="pre_text" >myhostname
+mydomain
+myorigin</pre>
+<p>You could be hosting multiple domains on your server, say abc.com + efg.com + xyz.com. You have to use one of them as a primary domain and use it for "myorigin". The myorigin field is the one that is configured automatically while postfix installs and asks you for the domain of the server.</p>
+<p>By default myorigin is configured to point to /etc/mailname so you can either fill in your default domain in /etc/mailname or specify in the configuration file directly.</p>
+<pre class="highlight  ">The domain specified with myorigin is used for mails generated by Postfix. For example when it fails to deliver a mail, it would reply with a from address of &quot;Mail Delivery System&lt;<a class="__cf_email__" href="/cdn-cgi/l/email-protection" data-cfemail="4c010d0500091e61080d090103020c2135233e252b2522">[email&#160;protected]</a><script data-cfhash='f9e31' type="text/javascript">/* <![CDATA[ */!function(t,e,r,n,c,a,p){try{t=document.currentScript||function(){for(t=document.getElementsByTagName('script'),e=t.length;e--;)if(t[e].getAttribute('data-cfhash'))return t[e]}();if(t&&(c=t.previousSibling)){p=t.parentNode;if(a=c.getAttribute('data-cfemail')){for(e='',r='0x'+a.substr(0,2)|0,n=2;a.length-n;n+=2)e+='%'+('0'+('0x'+a.substr(n,2)^r).toString(16)).slice(-2);p.replaceChild(document.createTextNode(decodeURIComponent(e)),c)}p.removeChild(t)}}catch(u){}}()/* ]]> */</script>&gt;&quot;.</pre>
+<p>The myhostname parameter is supposed to contain the your "mail server name" as indicated by your mx record. This is the name that Postfix uses in smtp communication to identify itself. For example "HELO myhostname".</p>
+<pre class="highlight  ">If you set myhostname to a certain domain, then you should be able to setup the SPF records for that domain later. This is dictated by the SPF specifications.</pre>
+<p>You might as well leave myhostname to just "localhost" and things would still work just fine. However in that case your server would use a message like "HELO localhost" when connecting to other mail servers like gmail, and gmail would angrily reject the mail calling it unsolicited.</p>
+<p>Therefore it is recommended to configure myhostname to a proper domain name with valid A and TXT (SPF) records. Also make sure to set myorigin.</p>
+<p>Example configuration - </p>
+<pre class="pre_text" >myhostname = mail.yoursite.com
+myorigin = yoursite.com</pre>
+<p>Technically, on a single a server, you can use the same value of myorigin for myhostname. However in diverse setups involving multiple separate servers, the values of these fields need to setup more carefully.</p>
+<p>To learn more read the <a target="_blank" href="http://www.postfix.org/BASIC_CONFIGURATION_README.html" >Postfix basic configuration guide</a>.</p>
+<h4>Configure the LMTP socket - main.cf</h4>
+<p>The <a target="_blank" href="http://www.postfix.org/postconf.5.html#virtual_transport" >virtual_transport</a> parameter tells postfix to forward/transport the mails to dovecot for those domains that are listed in "virtual_mailbox_domains".</p>
+<pre class="pre_text" ># Handing off local delivery to Dovecot's LMTP
+virtual_transport = lmtp:unix:private/dovecot-lmtp</pre>
+<p>The path "private/dovecot-lmtp" is relative to "/var/spool/postfix/". The actual unix socket shall be configured later in the Dovecot configuration section.</p>
+<h4>Configure SASL - main.cf</h4>
+<p>Here we set the parameters to setup SASL based authentication for Postfix. Postfix internally is capable of talking to "Dovecot's SASL service" via a unix socket.</p>
+<pre class="pre_text" >#Enabling SMTP for authenticated users, and handing off authentication to Dovecot
+
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+smtpd_sasl_auth_enable = yes
+
+smtpd_tls_auth_only = yes</pre>
+<p>To check what different smtpd_sasl_type plugins your installation of Postfix supports run the following command.</p>
+<pre class="terminal" ># postconf -a
+cyrus
+dovecot</pre>
+<h4>Add mailbox domains - main.cf</h4>
+<p>Over here we specify the domains for which Postfix shall "accept" incoming mails. So specify all your inhouse domains over here. We shall be putting the domains in a file named virtual_mailbox_domains.</p>
+<pre class="pre_text" >#Virtual domains, users, and aliases
+virtual_mailbox_domains = /etc/postfix/virtual_mailbox_domains
+# virtual_mailbox_maps = /etc/postfix/virtual_mailbox_maps</pre>
+<pre class="terminal" ># nano /etc/postfix/virtual_mailbox_domains</pre>
+<p>Enter the domains, one in a line</p>
+<pre class="terminal" >example.com OK
+mysite.com OK</pre>
+<p>Then run postmap on the file. It will create a file named virtual_mailbox_domains.db which is going to be used by Postfix</p>
+<pre class="terminal" ># postmap /etc/postfix/virtual_mailbox_domains</pre>
+<p>The <a target="_blank" href="http://www.postfix.org/postconf.5.html#virtual_mailbox_maps" >virtual_mailbox_maps</a> table can be used to specify valid email addresses for the domains listed in virtual_mailbox_domains. </p>
+<pre class="highlight  ">However this is not necessary, since the SASL authentication via Dovecot would be doing the verification.</pre>
+<h4>Enable SMTPS and MSA - master.cf</h4>
+<p>In addition to the smtp service on port 25 we need to enable more services. SMTPS will operate on port 465 and MSA (<a target="_blank" href="https://en.wikipedia.org/wiki/Mail_submission_agent" >Mail submission Agent</a>) will operate on port 587. SMTP uses SSL/TLS authentication type and MSA uses STARTTLS.</p>
+<p>Find the section on "submission" and "smtps" in the file named /etc/postfix/master.cf and uncomment the first lines. YES ONLY THE FIRST LINE</p>
+<pre class="pre_text" >...
+submission inet n       -       -       -       -       smtpd
+#  -o syslog_name=postfix/submission
+#  -o smtpd_tls_security_level=encrypt
+#  -o smtpd_sasl_auth_enable=yes
+#  -o smtpd_reject_unlisted_recipient=no
+#  -o smtpd_client_restrictions=$mua_client_restrictions
+#  -o smtpd_helo_restrictions=$mua_helo_restrictions
+#  -o smtpd_sender_restrictions=$mua_sender_restrictions
+#  -o smtpd_recipient_restrictions=permit_sasl_authenticated,reject
+#  -o milter_macro_daemon_name=ORIGINATING
+smtps     inet  n       -       -       -       -       smtpd
+#  -o syslog_name=postfix/smtps
+#  -o smtpd_tls_wrappermode=yes
+#  -o smtpd_sasl_auth_enable=yes
+#  -o smtpd_reject_unlisted_recipient=no
+#  -o smtpd_client_restrictions=$mua_client_restrictions
+#  -o smtpd_helo_restrictions=$mua_helo_restrictions
+#  -o smtpd_sender_restrictions=$mua_sender_restrictions
+#  -o smtpd_recipient_restrictions=permit_sasl_authenticated,reject
+#  -o milter_macro_daemon_name=ORIGINATING
+...</pre>
+<p>The "submission" line enables the MSA service on port 587 and the "smtps" starts the SSL-enabled SMTP service on port 465.</p>
+<p>You may want to enable only the submission service, since SMTPS is now <a target="_blank" href="http://en.wikipedia.org/wiki/SMTPS" >deprecated</a> and maintained only for compatibility with Microsoft applications that do not support STARTTLS.</p>
+<pre class="highlight  ">Due to historic specifications, technically port 25, 465, 587 do almost the same thing. However as things are evolving they are being redefined.</pre>
+<p>Port 25 - is for MTA (Mail transmission Agent). MTA service is to allow other MTAs and MSAs to connect to and deliver mails.</p>
+<p>Port 465/587 - is for MSA (Mail submission agent). MSA service is for MUAs (mail user agents like thunderbird) to connect and deposit emails for delivery.</p>
+<pre class="pre_text" >Thunderbird (MUA) -&gt; your server smtp(MSA/MTA) -&gt; gmail (MTA) -&gt; Inbox</pre>
+<h4>Restart Postfix</h4>
+<p>We are done configuring Postfix. Now just restart.</p>
+<pre class="terminal" >$ sudo service postfix restart</pre>
+<h3>Install and Configure Dovecot</h3>
+<p>We are done with installing and configuring Postfix. What remains is Dovecot, the IMAP/POP server. But Dovecot does a lot more than that as we shall see right now.</p>
+<h4>Things to know</h4>
+<p>1. Dovecot shall be given a location to store the incoming mails handed over by Postfix.</p>
+<p>2. A separate system user account shall be created and given to dovecot so that dovecot can read/write the mail storage directory. In our example the user is called "vmail".</p>
+<p>3. Dovecot shall host secure IMAP and POP services to allow email clients to read Inbox.</p>
+<p>4. Dovecot shall provide the SASL authentication service to Postfix via a unix socket. The same username/password shall work with both Postfix (SMTP server) and Dovecot (IMAP/POP server)</p>
+<p>5. We shall use the full email address (<a class="__cf_email__" href="/cdn-cgi/l/email-protection" data-cfemail="5b313433351b3e233a362b373e75383436">[email&#160;protected]</a><script data-cfhash='f9e31' type="text/javascript">/* <![CDATA[ */!function(t,e,r,n,c,a,p){try{t=document.currentScript||function(){for(t=document.getElementsByTagName('script'),e=t.length;e--;)if(t[e].getAttribute('data-cfhash'))return t[e]}();if(t&&(c=t.previousSibling)){p=t.parentNode;if(a=c.getAttribute('data-cfemail')){for(e='',r='0x'+a.substr(0,2)|0,n=2;a.length-n;n+=2)e+='%'+('0'+('0x'+a.substr(n,2)^r).toString(16)).slice(-2);p.replaceChild(document.createTextNode(decodeURIComponent(e)),c)}p.removeChild(t)}}catch(u){}}()/* ]]> */</script>) as the username and set a encrypted password too.</p>
+<h4>Install Dovecot</h4>
+<p>First install dovecot and some necessary packages. Install dovecot core package and packages for imap, pop and lmtp support.</p>
+<pre class="terminal" ># sudo apt-get install dovecot-core dovecot-imapd dovecot-pop3d dovecot-lmtpd</pre>
+<p>Check version</p>
+<pre class="terminal" ># dovecot --version
+2.1.7</pre>
+<h4>Configure Dovecot</h4>
+<p>Now its time to configure Dovecot to setup user accounts and also SASL sockets to enable Postfix to do authentications. All configuration files lie inside the <b>/etc/dovecot/conf.d/</b> directory.</p>
+<p>Check the <b>/etc/dovecot/dovecot.conf</b> file and make sure that protocols file are included. It includes the configuration files for various protocols which enable them.</p>
+<pre class="pre_text" ># Enable installed protocols
+!include_try /usr/share/dovecot/protocols.d/*.protocol</pre>
+<p>Installed protocols can be listed like this</p>
+<pre class="terminal" ># ls -l /usr/share/dovecot/protocols.d
+total 12
+-rw-r--r-- 1 root root 28 Nov 30 15:44 imapd.protocol
+-rw-r--r-- 1 root root 28 Nov 30 15:44 lmtpd.protocol
+-rw-r--r-- 1 root root 28 Nov 30 15:44 pop3d.protocol
+#</pre>
+<h4>Configure Inbox location - 10-mail.conf</h4>
+<p>We tell dovecot to store mails inside /var/mail/vhosts directory and further put them sub directories for each domain and the user under that domain.</p>
+<pre class="highlight  ">Mails for <a class="__cf_email__" href="/cdn-cgi/l/email-protection" data-cfemail="285b47454d47464d684d50494558444d064b4745">[email&#160;protected]</a><script data-cfhash='f9e31' type="text/javascript">/* <![CDATA[ */!function(t,e,r,n,c,a,p){try{t=document.currentScript||function(){for(t=document.getElementsByTagName('script'),e=t.length;e--;)if(t[e].getAttribute('data-cfhash'))return t[e]}();if(t&&(c=t.previousSibling)){p=t.parentNode;if(a=c.getAttribute('data-cfemail')){for(e='',r='0x'+a.substr(0,2)|0,n=2;a.length-n;n+=2)e+='%'+('0'+('0x'+a.substr(n,2)^r).toString(16)).slice(-2);p.replaceChild(document.createTextNode(decodeURIComponent(e)),c)}p.removeChild(t)}}catch(u){}}()/* ]]> */</script> would be stored in /var/mail/vhosts/example.com/someone/</pre>
+<p>Edit the 10-mail.conf file</p>
+<pre class="pre_text" >#mail_location = mbox:~/mail:INBOX=/var/mail/%u
+mail_location = maildir:/var/mail/vhosts/%d/%n</pre>
+<p>Create the directory /var/mail/vhosts</p>
+<pre class="terminal" ># mkdir /var/mail/vhosts/</pre>
+<p>Now create inside that directory create a directory for each domain on which you want to receive mail on this server.</p>
+<pre class="terminal" ># mkdir /var/mail/vhosts/example.com</pre>
+<h4>Create a user to read the mails</h4>
+<p>Now create a user with name and group of vmail and uid and gid of 5000. Although the uid can be any number, we are choosing 5000 to indicate that it is not an ordinary user. The "-r" option further specifies that this user is a system level user and does not have any login.</p>
+<pre class="terminal" >$ groupadd -g 5000 vmail
+$ useradd -r -g vmail -u 5000 vmail -d /var/mail/vhosts -c &quot;virtual mail user&quot;</pre>
+<p>Give vmail full privileges to read/write on /var/mail/vhosts</p>
+<pre class="terminal" >$ chown -R vmail:vmail /var/mail/vhosts/</pre>
+<h4>Enable IMAPS and POP3S services - 10-master.conf</h4>
+<p>Now tell dovecot to start the imaps and pops services. Edit the 10-master.conf file and enable the ports for the services and specify ssl to yes. </p>
+<p>Leave the ports for imap and pop commented since we do not want to host un-secure services.</p>
+<p>For IMAPS - Secure IMAP</p>
+<pre class="pre_text" >service imap-login {
+  inet_listener imap {
+    #port = 143
+  }
+  inet_listener imaps {
+    port = 993
+    ssl = yes
+  }</pre>
+<p>For POP3S - Secure POP3</p>
+<pre class="pre_text" >service pop3-login {
+  inet_listener pop3 {
+    #port = 110
+  }
+  inet_listener pop3s {
+    port = 995
+    ssl = yes
+  }
+}</pre>
+<h4>Configure lmtp socket - 10-master.conf</h4>
+<p>The <a target="_blank" href="http://wiki2.dovecot.org/HowTo/PostfixDovecotLMTP" >dovecot wiki page on LMTP</a> shows a simple example of how to setup the lmtp socket in <b>/etc/dovecot/conf.d/10-master.conf</b> file.</p>
+<p>Find the section named "service lmtp" and fill in the path to the file where the unix socket would be created. This same path is used by postfix for the "virtual_transport" setting.</p>
+<pre class="pre_text" >service lmtp {
+  unix_listener /var/spool/postfix/private/dovecot-lmtp {
+    mode = 0600
+        user = postfix
+        group = postfix
+
+  }
+.....</pre>
+<p>The socket must have privileges of user:group postfix so that Postfix process can use it.</p>
+<h4>Configure SASL authentication socket</h4>
+<p>Find the section "service auth" and inside it add the following. If its already there, then just modify it.</p>
+<pre class="pre_text" >service auth {
+.....
+  # Postfix smtp-auth
+  unix_listener /var/spool/postfix/private/auth {
+    mode = 0666
+user=postfix
+group=postfix
+  }
+.....</pre>
+<h4>Configure authentication</h4>
+<p>Open the file conf.d/10-auth.conf and uncomment the disable_plaintext_auth line making sure that its set to yes. This ensures that TLS/SSL encryption is always used for authentication purpose.</p>
+<pre class="pre_text" >disable_plaintext_auth = yes</pre>
+<p>Find the setting named <a target="_blank" href="http://wiki2.dovecot.org/Authentication/Mechanisms" >auth_mechanism</a> and uncomment it. This setting specifies the format in which the password would be provided to dovecot.</p>
+<pre class="pre_text" >auth_mechanisms = plain login</pre>
+<p><b>Specify authentication files</b></p>
+<p>The last thing to configure in 10-auth.conf file is the password database. By default dovecot is configured to authenticate using "system users" (linux users from /etc/passwd).</p>
+<p>We are going to tell it to authenticate using a separate file containing the usernames and passwords</p>
+<p>Find and comment out the auth-system.conf.ext line and uncomment the auth-passwdfile line. It should look something like this</p>
+<pre class="pre_text" >#!include auth-system.conf.ext
+#!include auth-sql.conf.ext   
+#!include auth-ldap.conf.ext
+!include auth-passwdfile.conf.ext
+#!include auth-checkpassword.conf.ext
+#!include auth-vpopmail.conf.ext
+#!include auth-static.conf.ext</pre>
+<p>Next edit the auth-passwdfile.conf.ext file</p>
+<pre class="terminal" >/etc/dovecot/conf.d# nano auth-passwdfile.conf.ext</pre>
+<p>Make it look something like this.</p>
+<pre class="pre_text" >passdb {
+  driver = passwd-file
+  args = scheme=PLAIN username_format=%u /etc/dovecot/dovecot-users
+}
+
+userdb {
+  driver = static
+#  args = username_format=%u /etc/dovecot/dovecot-users
+args = uid=vmail gid=vmail home=/var/mail/vhosts/%d/%n
+
+  # Default fields that can be overridden by passwd-file
+  #default_fields = quota_rule=*:storage=1G
+
+  # Override fields from passwd-file
+  #override_fields = home=/home/virtual/%u
+}</pre>
+<p>The passdb section tells dovecot where to look for the username and passwords in order to authenticate.  The file is /etc/dovecot/dovecot-users.</p>
+<p>The username_format "%u" tells that the entire email address will be used as the username. This means that when logging in from an email client you would use the email address as the username for both smtp and imap/pop.</p>
+<p>The username and passwords are stored in a file named /etc/dovecot/dovecot-users that we shall create in the next step</p>
+<p>The userdb section tells dovecot where to read/write the mails for a given user. We are using a fixed directory structure <b>/var/mail/vhosts/%d/%n</b></p>
+<p>So mails for the user <a class="__cf_email__" href="/cdn-cgi/l/email-protection" data-cfemail="7c0f1311191312193c19041d110c1019521f1311">[email&#160;protected]</a><script data-cfhash='f9e31' type="text/javascript">/* <![CDATA[ */!function(t,e,r,n,c,a,p){try{t=document.currentScript||function(){for(t=document.getElementsByTagName('script'),e=t.length;e--;)if(t[e].getAttribute('data-cfhash'))return t[e]}();if(t&&(c=t.previousSibling)){p=t.parentNode;if(a=c.getAttribute('data-cfemail')){for(e='',r='0x'+a.substr(0,2)|0,n=2;a.length-n;n+=2)e+='%'+('0'+('0x'+a.substr(n,2)^r).toString(16)).slice(-2);p.replaceChild(document.createTextNode(decodeURIComponent(e)),c)}p.removeChild(t)}}catch(u){}}()/* ]]> */</script> would be read from the following directory -</p>
+<pre class="pre_text" >/var/mail/vhosts/example.com/someone/</pre>
+<h4>Configure user accounts</h4>
+<p>Create a simple plain text file inside /etc/dovecot/ and fill it with username and passwords in the format user:password. Here is an example</p>
+<pre class="pre_text" ># cat dovecot-users 
+<a class="__cf_email__" href="/cdn-cgi/l/email-protection" data-cfemail="80f3efede5efeee5c0e5f8e1edf0ece5aee3efed">[email&#160;protected]</a><script data-cfhash='f9e31' type="text/javascript">/* <![CDATA[ */!function(t,e,r,n,c,a,p){try{t=document.currentScript||function(){for(t=document.getElementsByTagName('script'),e=t.length;e--;)if(t[e].getAttribute('data-cfhash'))return t[e]}();if(t&&(c=t.previousSibling)){p=t.parentNode;if(a=c.getAttribute('data-cfemail')){for(e='',r='0x'+a.substr(0,2)|0,n=2;a.length-n;n+=2)e+='%'+('0'+('0x'+a.substr(n,2)^r).toString(16)).slice(-2);p.replaceChild(document.createTextNode(decodeURIComponent(e)),c)}p.removeChild(t)}}catch(u){}}()/* ]]> */</script>:{plain}abc123
+<a class="__cf_email__" href="/cdn-cgi/l/email-protection" data-cfemail="43292c26032e3a302a37266d202c2e">[email&#160;protected]</a><script data-cfhash='f9e31' type="text/javascript">/* <![CDATA[ */!function(t,e,r,n,c,a,p){try{t=document.currentScript||function(){for(t=document.getElementsByTagName('script'),e=t.length;e--;)if(t[e].getAttribute('data-cfhash'))return t[e]}();if(t&&(c=t.previousSibling)){p=t.parentNode;if(a=c.getAttribute('data-cfemail')){for(e='',r='0x'+a.substr(0,2)|0,n=2;a.length-n;n+=2)e+='%'+('0'+('0x'+a.substr(n,2)^r).toString(16)).slice(-2);p.replaceChild(document.createTextNode(decodeURIComponent(e)),c)}p.removeChild(t)}}catch(u){}}()/* ]]> */</script>:{MD5-CRYPT}$1$JdyRMcO6$qUwKZT40EVp/oIpVfAEXF1</pre>
+<p>Generate passwords using the doveadm command like this. The password hash returned by the above command should be copied as it is into the dovecot-users file.</p>
+<pre class="terminal" ># doveadm pw -s MD5-CRYPT
+Enter new password: 
+Retype new password: 
+{MD5-CRYPT}$1$JdyRMcO6$qUwKZT40EVp/oIpVfAEXF1
+#</pre>
+<p>The password file can also contain information about individual user's mailbox directory and permissions. Check the <a target="_blank" href="http://wiki2.dovecot.org/AuthDatabase/PasswdFile" >wiki article on passwdfile format</a>.</p>
+<h4>Enable SSL in dovecot - 10-ssl.conf</h4>
+<p>Open the file /etc/dovecot/conf.d/10-ssl.conf and uncomment the ssl line and set it to required</p>
+<pre class="pre_text" ># SSL/TLS support: yes, no, required. &lt;doc/wiki/SSL.txt&gt;
+ssl = required</pre>
+<p>Also ensure that ssl_cert and ssl_key are pointing to proper files (this is by default)</p>
+<pre class="pre_text" >ssl_cert = &lt;/etc/dovecot/dovecot.pem
+ssl_key = &lt;/etc/dovecot/private/dovecot.pem
+&amp;#91;/pre&amp;#93;
+
+If you have your own certificates from a certificate authority then use them here.
+
+&lt;h4&gt;Setup dovecot log files&lt;/h4&gt;
+
+Dovecot by default logs to /var/log/syslog which is already a giant warehouse of logs and would make it difficult to search in there. A neater way is to make dovecot log to a separate file that is easier to track. The configuration lies in the file /etc/dovecot/conf.d/10-logging.conf
+
+Open the file and edit the log_path variable and set it to /var/log/dovecot.log
+Also note that info_log_path and debug_log_path would use the same to log information and debugging messages respectively. If you want to separate them further then set a log file for each.
+
+[pre]
+# Log file to use for error messages. &quot;syslog&quot; logs to syslog,
+# /dev/stderr logs to stderr.
+log_path = /var/log/dovecot.log
+
+# Log file to use for informational messages. Defaults to log_path.
+#info_log_path =
+# Log file to use for debug messages. Defaults to info_log_path.
+#debug_log_path =</pre>
+<p><b>Setup logrotate</b></p>
+<p>If we change the log files of Dovecot, then it is necessary to configure logrotate to ensure that log files are created in parts instead of one large file.</p>
+<pre class="terminal" >$ nano /etc/logrotate.d/dovecot</pre>
+<p>And fill the following</p>
+<pre class="pre_text" >/var/log/dovecot*.log {
+  missingok
+  notifempty
+  delaycompress
+  sharedscripts
+  postrotate
+    doveadm log reopen
+  endscript
+}</pre>
+<p>For more information check <a target="_blank" href="http://wiki2.dovecot.org/Logging" >dovecot wiki page on logging</a>.</p>
+<h4>Restart Dovecot</h4>
+<p>Good work. All configurations done. Now restart dovecot</p>
+<pre class="terminal" >$ sudo service dovecot restart</pre>
+<h3>Test</h3>
+<p>Now that you are done configuring everything its time to test. Use a mail client like Thunderbird and configure SMTP and IMAP connections.</p>
+<p>Then try sending a mail out to some other account like a gmail. If you receive the mail on gmail, try replying back. If the mail shows up in your mail client, you are done. <b>Congratulations!</b></p>
+<p><b>Checking open ports with netstat</b></p>
+<p>Use the netstat command to check that services are up and running</p>
+<pre class="terminal" ># netstat -ltnp
+Active Internet connections (only servers)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 0.0.0.0:993             0.0.0.0:*               LISTEN      28791/dovecot   
+tcp        0      0 0.0.0.0:995             0.0.0.0:*               LISTEN      28791/dovecot   
+tcp        0      0 127.0.0.1:3306          0.0.0.0:*               LISTEN      3315/mysqld     
+tcp        0      0 0.0.0.0:587             0.0.0.0:*               LISTEN      16218/master    
+tcp        0      0 0.0.0.0:110             0.0.0.0:*               LISTEN      28791/dovecot   
+tcp        0      0 0.0.0.0:143             0.0.0.0:*               LISTEN      28791/dovecot   
+tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      3337/nginx      
+tcp        0      0 0.0.0.0:465             0.0.0.0:*               LISTEN      16218/master    
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      3252/sshd       
+tcp        0      0 0.0.0.0:25              0.0.0.0:*               LISTEN      16218/master</pre>
+<p>In the above output we can see that dovecot is holding ports 993, 995, 110 and 143<br />
+Whereas Postfix (master) is holding ports 587, 465 and 25</p>
+<h3>Troubleshooting</h3>
+<p><b>1. mail.log empty</b></p>
+<p>On Ubuntu servers the /var/log/mail.log file might be totally blank. This happens due to permission issues and can be fixed with the following commands </p>
+<pre class="terminal" ># ls -l /var/log/mail.log
+-rw-r----- 1 messagebus adm 0 Apr 26  2013 /var/log/mail.log</pre>
+<p>The correct owner of the file should be syslog. Set the correct ownership permission with the following commands -</p>
+<pre class="terminal" >$ sudo chown syslog.adm /var/log/mail.log
+$ sudo chmod 640 /var/log/mail.log</pre>
+<p>Now the mail.log file should be populated with the correct messages to track what is going on with the Postfix server.</p>
+<p><b>2. Relay access denied</b></p>
+<p>When sending mails, if the postfix log (/var/log/mail.log) shows such an error message -</p>
+<pre class="pre_text" >Dec  1 09:57:12 li240-5 postfix/smtpd[25795]: NOQUEUE: reject: RCPT from unknown[122.163.8.12]: 454 4.7.1 &lt;...&gt;: Relay access denied; from=&lt;...&gt; to=&lt;...&gt; proto=ESMTP helo=&lt;&amp;#91;192.168.1.2&amp;#93;&gt;</pre>
+<p>Make sure that smtpd_relay_restrictions field (/etc/postfix/main.cf) has "permit_sasl_authenticated" listed so that users authenticated via SASL are allowed to send mails using postfix as an smtp server.</p>
+<pre class="pre_text" >smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination</pre>
+<p><b>3. Error while receiving mail</b></p>
+<p>If the dovecot logs show such an error message when receiving mails -</p>
+<pre class="pre_text" >Dec 02 18:32:12 lmtp(4412): Fatal: Error reading configuration: Invalid settings: postmaster_address setting not given</pre>
+<p>Just edit /etc/dovecot/conf.d/15-lda.conf and add a value for postmaster_address</p>
+<pre class="pre_text" ># Address to use when sending rejection mails.
+# Default is postmaster@&lt;your domain&gt;. %d expands to recipient domain.
+postmaster_address = <a class="__cf_email__" href="/cdn-cgi/l/email-protection" data-cfemail="04746b777069657770617644686b6765686c6b7770">[email&#160;protected]</a><script data-cfhash='f9e31' type="text/javascript">/* <![CDATA[ */!function(t,e,r,n,c,a,p){try{t=document.currentScript||function(){for(t=document.getElementsByTagName('script'),e=t.length;e--;)if(t[e].getAttribute('data-cfhash'))return t[e]}();if(t&&(c=t.previousSibling)){p=t.parentNode;if(a=c.getAttribute('data-cfemail')){for(e='',r='0x'+a.substr(0,2)|0,n=2;a.length-n;n+=2)e+='%'+('0'+('0x'+a.substr(n,2)^r).toString(16)).slice(-2);p.replaceChild(document.createTextNode(decodeURIComponent(e)),c)}p.removeChild(t)}}catch(u){}}()/* ]]> */</script></pre>
+<h3>Create SPF DNS records to enable validation and avoid spam</h3>
+<p>Try sending an email to some gmail address through a mail client like thunderbird and via the postfix smtp server, and mail would land into the spam folder of gmail, or might get rejected entirely.</p>
+<p>To solve this, the SPF records for the sender domain have to be setup. If the postfix server sends out mails with "from address" of <a class="__cf_email__" href="/cdn-cgi/l/email-protection" data-cfemail="6615090b0309080326031e070b160a034805090b">[email&#160;protected]</a><script data-cfhash='f9e31' type="text/javascript">/* <![CDATA[ */!function(t,e,r,n,c,a,p){try{t=document.currentScript||function(){for(t=document.getElementsByTagName('script'),e=t.length;e--;)if(t[e].getAttribute('data-cfhash'))return t[e]}();if(t&&(c=t.previousSibling)){p=t.parentNode;if(a=c.getAttribute('data-cfemail')){for(e='',r='0x'+a.substr(0,2)|0,n=2;a.length-n;n+=2)e+='%'+('0'+('0x'+a.substr(n,2)^r).toString(16)).slice(-2);p.replaceChild(document.createTextNode(decodeURIComponent(e)),c)}p.removeChild(t)}}catch(u){}}()/* ]]> */</script>, then the TXT DNS records of example.com must contain the SPF validation information to indicate that <b>this</b> server is authorised to send out mails on behalf of example.com</p>
+<p>All that needs to be done is to edit your nameserver's zone entries and add a TXT record containing the following</p>
+<pre class="pre_text" >&quot;v=spf1 mx a -all&quot;</pre>
+<p>Most vps providers like Linode provide a neat interface to edit DNS settings like those. Check out <a target="_blank" href="http://www.openspf.org/" >OpenSPF project website</a> to learn more about it.</p>
+<p>Check the SPF records of your domain with this simple command -</p>
+<pre class="pre_text" >$ dig -t TXT example.com</pre>
+<h3>Notes</h3>
+<p>The above example uses a file to store email accounts and passwords. This makes it convenient when you need few email accounts on your personal server and won't be modifying them too often.</p>
+<p>However, at large scales when providing emails to a large number of users and creating/deleting accounts often, the recommended way is to store virtual_mailbox_domains and virtual_mailbox_maps in a database and then use some database client to modify records quickly and easily. </p>
+<p>Both Postfix and Dovecot support Mysql/MariaDB.</p>
+<p>Check out the resources at the bottom for links useful articles on how to configure Postfix and Dovecot in other ways using a database.</p>
+<h3>What next</h3>
+<p>1. You can install a web based mail client like Roundcube to be able to login to your server from the browser and read/send mails.</p>
+<p>2. Some users (like me ofcourse) prefer to use Google's gmail as a mail client by adding smtp and pop account information. Google would quickly allow you to send mails using this brand new smtp server setup above. </p>
+<p>But gmail would not read mails from the IMAP/POP server created above, until we use a real certificate from a certificate authority (CA) in Dovecot. </p>
+<p>SSL certificates from CAs cost money, but you can get a free certificate from <a target="_blank" href="https://www.startssl.com/" >StartCom StartSSL PKI</a> and use it with Dovecot and then gmail would allow you to read mails from this server.</p>
+<p>3. Further you should also setup DKIM (Domainkeys Identified Mail) for your domain, to enforce the authenticity of the mails and be treated as legitimate by major mail services like gmail.</p>
+<h3>Resources</h3>
+<p>Here are some more useful resources on how to setup and configure Postfix and Dovecot in various ways to get the exact kind of mail server you want.</p>
+<p>Linode tutorial on setting up Postfix and Dovecot with Mysql<br />
+<a target="_blank" href="https://www.linode.com/docs/email/postfix/email-with-postfix-dovecot-and-mysql" >https://www.linode.com/docs/email/postfix/email-with-postfix-dovecot-and-mysql</a></p>
+<p>Documentation of Postfix configuration parameters to use in main.cf<br />
+<a target="_blank" href="http://www.postfix.org/postconf.5.html" >http://www.postfix.org/postconf.5.html</a></p>
+<p>Explanation of the different kind of domains that Postfix supports and uses<br />
+<a target="_blank" href="https://workaround.org/ispmail/squeeze/postfix-domain-types" >https://workaround.org/ispmail/squeeze/postfix-domain-types</a></p>
+<p>Details of how Postfix deals with different kinds of virtual domains<br />
+<a target="_blank" href="http://www.postfix.org/VIRTUAL_README.html" >http://www.postfix.org/VIRTUAL_README.html</a></p>
+<p>Full Postfix documentation<br />
+<a target="_blank" href="http://www.postfix.org/documentation.html" >http://www.postfix.org/documentation.html</a></p>
+<div class="updated_on">Last Updated On : 3rd February 2016</div>
+<div class='dd_outer'><div class='dd_inner'><div id='dd_ajax_float'><div class='dd_button_v'><a target="_blank" href="http://twitter.com/share"  class="twitter-share-button" data-url="http://www.binarytides.com/install-postfix-dovecot-debian/" data-count="vertical" data-text="Setup a mail server with Postfix and Dovecot on Ubuntu / Debian" data-via="binarytides" ></a><script type="text/javascript" src="//platform.twitter.com/widgets.js"></script></div><div style='clear:left'></div><div class='dd_button_v'><iframe src='http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.binarytides.com%2Finstall-postfix-dovecot-debian%2F&amp;locale=en_US&amp;layout=box_count&amp;action=like&amp;width=50&amp;height=60&amp;colorscheme=light' scrolling='no' frameborder='0' style='border:none; overflow:hidden; width:50px; height:62px;' allowTransparency='true'></iframe></div><div style='clear:left'></div><div class='dd_button_v'><script type='text/javascript' src='https://apis.google.com/js/plusone.js'></script><g:plusone size='tall' href='http://www.binarytides.com/install-postfix-dovecot-debian/'></g:plusone></div><div style='clear:left'></div><div class='dd_button_v'><script src='//platform.linkedin.com/in.js' type='text/javascript'></script><script type='IN/Share' data-url='http://www.binarytides.com/install-postfix-dovecot-debian/' data-counter='top'></script></div><div style='clear:left'></div></div></div></div><script type="text/javascript">var dd_offset_from_content = 40;var dd_top_offset_from_content = 0;var dd_override_start_anchor_id = "";var dd_override_top_offset = "";</script><script type="text/javascript" src="http://www.binarytides.com/blog/wp-content/plugins/digg-digg//js/diggdigg-floating-bar.js?ver=5.3.6"></script>
+
+
+
+
+
+                    <div class="postTags">
+<a href="http://www.binarytides.com/tag/dovecot/"><b>dovecot</b></a><a href="http://www.binarytides.com/tag/imap/"><b>imap</b></a><a href="http://www.binarytides.com/tag/mail-server/"><b>mail server</b></a><a href="http://www.binarytides.com/tag/pop/"><b>pop</b></a><a href="http://www.binarytides.com/tag/postfix/"><b>postfix</b></a></div>
+
+
+
+
+
+				</div>
+	
+
+<input type="hidden" name="IL_IN_TAG" value="2"/>
+				
+
+<div id="subscribe_feedburner"> 
+
+<form style="text-align:center;" action="http://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open('http://feedburner.google.com/fb/a/mailverify?uri=binarytides', 'popupwindow', 'scrollbars=yes,width=550,height=520');return true">
+
+
+<p style="margin:0; font-weight:bold;">
+Subscribe to get updates delivered to your inbox 
+
+<input type="text" name="email" placeholder="Enter email to subscribe" style="width: 200px;
+border:none;
+padding: 5px;
+line-height: 20px;
+outline: none;
+margin-left: 10px;"/>
+
+<input type="submit" value="Subscribe" style="background: #07c;
+color: #fff;
+border:none;
+margin:0 0 0 10px;
+outline: none;
+font-weight:bold;
+line-height: 20px;
+background:#E26A1A;
+padding: 5px 10px;" />
+</p>
+
+<input type="hidden" value="binarytides" name="uri"/><input type="hidden" name="loc" value="en_US"/>
+
+
+</form>
+</div>
+
+
+
+
+<div class="postCredentials">
+				
+<div id="relatedPosts">
+		
+							
+							<!-- Related Posts-->
+
+<div class='yarpp-related'>
+<h3>Related Posts</h3>
+<ul>
+		<li>
+		<a href="http://www.binarytides.com/postfix-mail-forwarding-debian/" rel="bookmark" title="Setup mail forwarding in postfix on Ubuntu or Debian">
+	<img width="220" height="120" src="http://www.binarytides.com/blog/wp-content/uploads/2013/09/elementary-os-luna-220x120.png" />
+</a>	
+
+		
+	<a href="http://www.binarytides.com/postfix-mail-forwarding-debian/">Setup mail forwarding in postfix on Ubuntu or Debian</a><!-- (53.0)-->
+
+</li>
+		<li>
+		<a href="http://www.binarytides.com/linux-mail-with-smtp/" rel="bookmark" title="Send mail from command line with external smtp server on Linux">
+	<img width="220" height="120" src="http://www.binarytides.com/blog/wp-content/uploads/2013/09/elementary-os-luna-220x120.png" />
+</a>	
+
+		
+	<a href="http://www.binarytides.com/linux-mail-with-smtp/">Send mail from command line with external smtp server on Linux</a><!-- (33.5)-->
+
+</li>
+		<li>
+		<a href="http://www.binarytides.com/linux-mailx-command/" rel="bookmark" title="9 mail/mailx command examples to send emails from command line on Linux">
+	<img width="220" height="120" src="http://www.binarytides.com/blog/wp-content/uploads/2013/09/elementary-os-luna-220x120.png" />
+</a>	
+
+		
+	<a href="http://www.binarytides.com/linux-mailx-command/">9 mail/mailx command examples to send emails from command line on Linux</a><!-- (23.4)-->
+
+</li>
+	</ul>
+
+<div style="clear:both;"></div>
+</div>
+
+</div>
+
+														<!-- end Related Posts-->
+							
+
+
+<div id="authorDetails">
+								<img alt='' src='http://2.gravatar.com/avatar/e23f2767e6907e798da5b28694a2bf28?s=64&#038;r=g' srcset='http://2.gravatar.com/avatar/e23f2767e6907e798da5b28694a2bf28?s=128&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />				About <b>Silver Moon</b>
+						<p>
+Php developer, blogger and Linux enthusiast. 
+He can be reached at <a href="/cdn-cgi/l/email-protection#395b5057584b404d505d5c4a795e54585055175a5654"><span class="__cf_email__" data-cfemail="ceaca7a0afbcb7baa7aaabbd8ea9a3afa7a2e0ada1a3">[email&#160;protected]</span><script data-cfhash='f9e31' type="text/javascript">/* <![CDATA[ */!function(t,e,r,n,c,a,p){try{t=document.currentScript||function(){for(t=document.getElementsByTagName('script'),e=t.length;e--;)if(t[e].getAttribute('data-cfhash'))return t[e]}();if(t&&(c=t.previousSibling)){p=t.parentNode;if(a=c.getAttribute('data-cfemail')){for(e='',r='0x'+a.substr(0,2)|0,n=2;a.length-n;n+=2)e+='%'+('0'+('0x'+a.substr(n,2)^r).toString(16)).slice(-2);p.replaceChild(document.createTextNode(decodeURIComponent(e)),c)}p.removeChild(t)}}catch(u){}}()/* ]]> */</script></a>.
+Or find him on <a href="https://plus.google.com/117145272367995638274/posts" rel="author">Google+</a>
+
+</p>
+						</div>
+					
+		</div>
+		<!-- postboxcredentials -->
+	
+
+<div class="ad728x90 adwrap" style="margin:20px 0;">
+
+<!-- BEGIN IFRAME TAG - binarytides.com RON Global Display Rev Share < - DO NOT MODIFY -->
+<IFRAME SRC="http://ads.cpxinteractive.com/tt?id=2151978&size=728x90&referrer=binarytides.com" FRAMEBORDER="0" SCROLLING="no" MARGINHEIGHT="0" MARGINWIDTH="0" TOPMARGIN="0" LEFTMARGIN="0" ALLOWTRANSPARENCY="true" WIDTH="728" HEIGHT="90"></IFRAME>
+<!-- END TAG -->
+
+</div>
+
+<div class="postBoxMidInner" id="comments">
+		
+		
+		
+        
+<!-- You can start editing here. -->
+
+	<h2 class="h2comments">15 Comments <a href="#respond" class="addComment">+ Add Comment</a></h2>
+
+	<ul class="commentlist">
+	   <li class="comment even thread-even depth-1 clearfix" id="li-comment-85454">
+	 <img alt='' src='http://1.gravatar.com/avatar/728263892029c4132e5ce549fb9d7754?s=38&#038;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&#038;r=g' srcset='http://1.gravatar.com/avatar/728263892029c4132e5ce549fb9d7754?s=76&amp;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&amp;r=g 2x' class='avatar avatar-38 photo' height='38' width='38' />     <div id="comment-85454">
+	  <div class="comment-meta commentmetadata clearfix">
+	    <strong>laura</strong> <span>June 23, 2016 at 10:14 pm	  </span>
+	  </div>
+	  
+      <div class="text">
+		  <p>how should I add the MX records?</p>
+	  </div>
+	  
+	  
+      <div class="reply">
+         <a rel='nofollow' class='comment-reply-link' href='http://www.binarytides.com/install-postfix-dovecot-debian/?replytocom=85454#respond' onclick='return addComment.moveForm( "comment-85454", "85454", "respond", "7426" )' aria-label='Reply to laura'>Reply</a>      </div>
+     </div>
+</li><!-- #comment-## -->
+   <li class="comment odd alt thread-odd thread-alt depth-1 clearfix" id="li-comment-84952">
+	 <img alt='' src='http://1.gravatar.com/avatar/728263892029c4132e5ce549fb9d7754?s=38&#038;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&#038;r=g' srcset='http://1.gravatar.com/avatar/728263892029c4132e5ce549fb9d7754?s=76&amp;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&amp;r=g 2x' class='avatar avatar-38 photo' height='38' width='38' />     <div id="comment-84952">
+	  <div class="comment-meta commentmetadata clearfix">
+	    <strong>laura</strong> <span>June 21, 2016 at 9:49 pm	  </span>
+	  </div>
+	  
+      <div class="text">
+		  <p>Thank you for this tutorial. I followed the steps and I am able to send mail to my gmail account but when I try to send an email from my gmail account to the mail server, it fails with this error: user was not found as domain. I have also added the MX record to my DNS server. The errors that exist in my dovecot.log file is that passdb doesn&#8217;t support credential lookups and  passwd(<a class="__cf_email__" href="/cdn-cgi/l/email-protection" data-cfemail="6b1e180e195a2b0f04060a0205">[email&#160;protected]</a><script data-cfhash='f9e31' type="text/javascript">/* <![CDATA[ */!function(t,e,r,n,c,a,p){try{t=document.currentScript||function(){for(t=document.getElementsByTagName('script'),e=t.length;e--;)if(t[e].getAttribute('data-cfhash'))return t[e]}();if(t&&(c=t.previousSibling)){p=t.parentNode;if(a=c.getAttribute('data-cfemail')){for(e='',r='0x'+a.substr(0,2)|0,n=2;a.length-n;n+=2)e+='%'+('0'+('0x'+a.substr(n,2)^r).toString(16)).slice(-2);p.replaceChild(document.createTextNode(decodeURIComponent(e)),c)}p.removeChild(t)}}catch(u){}}()/* ]]> */</script>): unknown user<br />
+ I get this error when I try this command: doveadm user <a class="__cf_email__" href="/cdn-cgi/l/email-protection" data-cfemail="bbcec8dec98afbdfd4d6dad2d595">[email&#160;protected]</a><script data-cfhash='f9e31' type="text/javascript">/* <![CDATA[ */!function(t,e,r,n,c,a,p){try{t=document.currentScript||function(){for(t=document.getElementsByTagName('script'),e=t.length;e--;)if(t[e].getAttribute('data-cfhash'))return t[e]}();if(t&&(c=t.previousSibling)){p=t.parentNode;if(a=c.getAttribute('data-cfemail')){for(e='',r='0x'+a.substr(0,2)|0,n=2;a.length-n;n+=2)e+='%'+('0'+('0x'+a.substr(n,2)^r).toString(16)).slice(-2);p.replaceChild(document.createTextNode(decodeURIComponent(e)),c)}p.removeChild(t)}}catch(u){}}()/* ]]> */</script> but when I try doveadm user user1 , I dont get any errors. However both commands show me the results that the user exists. Please help me, I have been working on this for days and I dont really know what the problem is. I am also new to dovecot and postfix. I greatly appreicate your help. If you need anything else from my files please let me know.</p>
+	  </div>
+	  
+	  
+      <div class="reply">
+         <a rel='nofollow' class='comment-reply-link' href='http://www.binarytides.com/install-postfix-dovecot-debian/?replytocom=84952#respond' onclick='return addComment.moveForm( "comment-84952", "84952", "respond", "7426" )' aria-label='Reply to laura'>Reply</a>      </div>
+     </div>
+</li><!-- #comment-## -->
+   <li class="comment even thread-even depth-1 clearfix" id="li-comment-77543">
+	 <img alt='' src='http://2.gravatar.com/avatar/ecfaf661bf556802b84d83607b34cbe5?s=38&#038;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&#038;r=g' srcset='http://2.gravatar.com/avatar/ecfaf661bf556802b84d83607b34cbe5?s=76&amp;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&amp;r=g 2x' class='avatar avatar-38 photo' height='38' width='38' />     <div id="comment-77543">
+	  <div class="comment-meta commentmetadata clearfix">
+	    <strong>Thomas</strong> <span>May 16, 2016 at 1:32 pm	  </span>
+	  </div>
+	  
+      <div class="text">
+		  <p>Thanks a lot for this guide. </p>
+<p>Just want to add a note on the ssl config. If you dont have certificate and key pem files you can generate them by using<br />
+mkcert.sh located in /usr/share/dovecot.</p>
+	  </div>
+	  
+	  
+      <div class="reply">
+         <a rel='nofollow' class='comment-reply-link' href='http://www.binarytides.com/install-postfix-dovecot-debian/?replytocom=77543#respond' onclick='return addComment.moveForm( "comment-77543", "77543", "respond", "7426" )' aria-label='Reply to Thomas'>Reply</a>      </div>
+     </div>
+</li><!-- #comment-## -->
+   <li class="comment odd alt thread-odd thread-alt depth-1 clearfix" id="li-comment-68126">
+	 <img alt='' src='http://0.gravatar.com/avatar/f8aee36fff19e311e24d445d5905b28a?s=38&#038;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&#038;r=g' srcset='http://0.gravatar.com/avatar/f8aee36fff19e311e24d445d5905b28a?s=76&amp;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&amp;r=g 2x' class='avatar avatar-38 photo' height='38' width='38' />     <div id="comment-68126">
+	  <div class="comment-meta commentmetadata clearfix">
+	    <strong>Nico</strong> <span>January 14, 2016 at 7:03 pm	  </span>
+	  </div>
+	  
+      <div class="text">
+		  <p>The best tutorial on the net! It worked, thank you so much!!! :)))</p>
+	  </div>
+	  
+	  
+      <div class="reply">
+         <a rel='nofollow' class='comment-reply-link' href='http://www.binarytides.com/install-postfix-dovecot-debian/?replytocom=68126#respond' onclick='return addComment.moveForm( "comment-68126", "68126", "respond", "7426" )' aria-label='Reply to Nico'>Reply</a>      </div>
+     </div>
+</li><!-- #comment-## -->
+   <li class="comment even thread-even depth-1 clearfix" id="li-comment-68125">
+	 <img alt='' src='http://0.gravatar.com/avatar/c9685a6550f02f2c08bd91a8d598affd?s=38&#038;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&#038;r=g' srcset='http://0.gravatar.com/avatar/c9685a6550f02f2c08bd91a8d598affd?s=76&amp;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&amp;r=g 2x' class='avatar avatar-38 photo' height='38' width='38' />     <div id="comment-68125">
+	  <div class="comment-meta commentmetadata clearfix">
+	    <strong>ashar</strong> <span>January 13, 2016 at 7:23 pm	  </span>
+	  </div>
+	  
+      <div class="text">
+		  <p>Hi Silver Moon, I&#8217;ve tried a few other ways before coming across your method. Your method is the best I have encountered so far because of the minimal changes and actually covering real world scenario i.e. 1 server and multiple domain names.</p>
+<p>The good news is that for the unix users (not on virtual host) the could receive email from external parties. However for the emails on vhosts, I still can&#8217;t read the emails with mal. mail (on command line) showed 0 messages. mail.log showed this<br />
+Jan 13 14:01:58 fr-str1 postfix/lmtp[17097]: 7CBBE1A0AD: to=, relay=none, delay=63405, delays=63405/0.01/0/0, dsn=4.4.1, status=deferred (connect to fr-str1.mydomain.net[private/dovecot-lmtp]: No such file or directory)</p>
+<p>I have tried changing the the value in postfix main.cf for the virtual transport but that would result in postfix error. I believe this error I have made is on dovecot config. Would you happen to have some idea which file it is and how could I correct it?</p>
+<p>Thank you very much</p>
+	  </div>
+	  
+	  
+      <div class="reply">
+         <a rel='nofollow' class='comment-reply-link' href='http://www.binarytides.com/install-postfix-dovecot-debian/?replytocom=68125#respond' onclick='return addComment.moveForm( "comment-68125", "68125", "respond", "7426" )' aria-label='Reply to ashar'>Reply</a>      </div>
+     </div>
+</li><!-- #comment-## -->
+   <li class="comment odd alt thread-odd thread-alt depth-1 clearfix" id="li-comment-68115">
+	 <img alt='' src='http://2.gravatar.com/avatar/bd8d7bbffa57b3af8f3f84edc3c07f75?s=38&#038;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&#038;r=g' srcset='http://2.gravatar.com/avatar/bd8d7bbffa57b3af8f3f84edc3c07f75?s=76&amp;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&amp;r=g 2x' class='avatar avatar-38 photo' height='38' width='38' />     <div id="comment-68115">
+	  <div class="comment-meta commentmetadata clearfix">
+	    <strong>Basile Starynkevitch</strong> <span>December 31, 2015 at 1:02 am	  </span>
+	  </div>
+	  
+      <div class="text">
+		  <p>What about adding aliases (virtual ones)? See my question<br />
+<a target="_blank" href="http://unix.stackexchange.com/q/252389/50557"  rel="nofollow">http://unix.stackexchange.com/q/252389/50557</a></p>
+	  </div>
+	  
+	  
+      <div class="reply">
+         <a rel='nofollow' class='comment-reply-link' href='http://www.binarytides.com/install-postfix-dovecot-debian/?replytocom=68115#respond' onclick='return addComment.moveForm( "comment-68115", "68115", "respond", "7426" )' aria-label='Reply to Basile Starynkevitch'>Reply</a>      </div>
+     </div>
+</li><!-- #comment-## -->
+   <li class="comment even thread-even depth-1 clearfix" id="li-comment-67974">
+	 <img alt='' src='http://2.gravatar.com/avatar/846d0b0d86e58311a7a4a4f5b1415856?s=38&#038;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&#038;r=g' srcset='http://2.gravatar.com/avatar/846d0b0d86e58311a7a4a4f5b1415856?s=76&amp;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&amp;r=g 2x' class='avatar avatar-38 photo' height='38' width='38' />     <div id="comment-67974">
+	  <div class="comment-meta commentmetadata clearfix">
+	    <strong>Matej Tree</strong> <span>June 23, 2015 at 11:25 pm	  </span>
+	  </div>
+	  
+      <div class="text">
+		  <p>Hello,</p>
+<p>I followed this <a target="_blank" href="https://www.digitalocean.com/community/tutorials/how-to-install-and-setup-postfix-on-ubuntu-14-04"  rel="nofollow">https://www.digitalocean.com/community/tutorials/how-to-install-and-setup-postfix-on-ubuntu-14-04</a> tutorial before. Now I deleted from there my email and followed your tutorial and now I get this</p>
+<p>550 5.1.1 : Recipient address rejected: User unknown in local recipient table</p>
+<p>before the mail was working with mail cli app</p>
+	  </div>
+	  
+	  
+      <div class="reply">
+         <a rel='nofollow' class='comment-reply-link' href='http://www.binarytides.com/install-postfix-dovecot-debian/?replytocom=67974#respond' onclick='return addComment.moveForm( "comment-67974", "67974", "respond", "7426" )' aria-label='Reply to Matej Tree'>Reply</a>      </div>
+     </div>
+</li><!-- #comment-## -->
+   <li class="comment odd alt thread-odd thread-alt depth-1 clearfix" id="li-comment-67956">
+	 <img alt='' src='http://0.gravatar.com/avatar/07d0ec9472b07a133491cfb356592e99?s=38&#038;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&#038;r=g' srcset='http://0.gravatar.com/avatar/07d0ec9472b07a133491cfb356592e99?s=76&amp;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&amp;r=g 2x' class='avatar avatar-38 photo' height='38' width='38' />     <div id="comment-67956">
+	  <div class="comment-meta commentmetadata clearfix">
+	    <strong>qba</strong> <span>June 5, 2015 at 5:17 pm	  </span>
+	  </div>
+	  
+      <div class="text">
+		  <p>I keep getting </p>
+<p>User unknown in local recipient table<br />
+postfix doesnt see dovecot user, whats the problem?</p>
+	  </div>
+	  
+	  
+      <div class="reply">
+         <a rel='nofollow' class='comment-reply-link' href='http://www.binarytides.com/install-postfix-dovecot-debian/?replytocom=67956#respond' onclick='return addComment.moveForm( "comment-67956", "67956", "respond", "7426" )' aria-label='Reply to qba'>Reply</a>      </div>
+     </div>
+</li><!-- #comment-## -->
+   <li class="comment even thread-even depth-1 clearfix" id="li-comment-67930">
+	 <img alt='' src='http://0.gravatar.com/avatar/060588f22d2a4c5e049156f23fcf1405?s=38&#038;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&#038;r=g' srcset='http://0.gravatar.com/avatar/060588f22d2a4c5e049156f23fcf1405?s=76&amp;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&amp;r=g 2x' class='avatar avatar-38 photo' height='38' width='38' />     <div id="comment-67930">
+	  <div class="comment-meta commentmetadata clearfix">
+	    <strong>Miroslav Kravec</strong> <span>May 4, 2015 at 11:41 am	  </span>
+	  </div>
+	  
+      <div class="text">
+		  <p>Great tutorial! I&#8217;ve just done my first successful Dovecot configuration.</p>
+	  </div>
+	  
+	  
+      <div class="reply">
+         <a rel='nofollow' class='comment-reply-link' href='http://www.binarytides.com/install-postfix-dovecot-debian/?replytocom=67930#respond' onclick='return addComment.moveForm( "comment-67930", "67930", "respond", "7426" )' aria-label='Reply to Miroslav Kravec'>Reply</a>      </div>
+     </div>
+</li><!-- #comment-## -->
+   <li class="comment odd alt thread-odd thread-alt depth-1 clearfix" id="li-comment-67854">
+	 <img alt='' src='http://2.gravatar.com/avatar/55e2cedae64f8b711e7a3314dea4e3ed?s=38&#038;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&#038;r=g' srcset='http://2.gravatar.com/avatar/55e2cedae64f8b711e7a3314dea4e3ed?s=76&amp;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&amp;r=g 2x' class='avatar avatar-38 photo' height='38' width='38' />     <div id="comment-67854">
+	  <div class="comment-meta commentmetadata clearfix">
+	    <strong>ITSpecialist</strong> <span>February 28, 2015 at 6:47 am	  </span>
+	  </div>
+	  
+      <div class="text">
+		  <p>I have to be signed into my Ubuntu server in order for my email client to work? Is there a step that I missed or is everyone else signed into there server too?</p>
+	  </div>
+	  
+	  
+      <div class="reply">
+         <a rel='nofollow' class='comment-reply-link' href='http://www.binarytides.com/install-postfix-dovecot-debian/?replytocom=67854#respond' onclick='return addComment.moveForm( "comment-67854", "67854", "respond", "7426" )' aria-label='Reply to ITSpecialist'>Reply</a>      </div>
+     </div>
+</li><!-- #comment-## -->
+   <li class="comment even thread-even depth-1 clearfix" id="li-comment-67803">
+	 <img alt='' src='http://1.gravatar.com/avatar/de4596fc46e293b0b23d040381d23bc8?s=38&#038;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&#038;r=g' srcset='http://1.gravatar.com/avatar/de4596fc46e293b0b23d040381d23bc8?s=76&amp;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&amp;r=g 2x' class='avatar avatar-38 photo' height='38' width='38' />     <div id="comment-67803">
+	  <div class="comment-meta commentmetadata clearfix">
+	    <strong>Talisman</strong> <span>February 11, 2015 at 12:28 am	  </span>
+	  </div>
+	  
+      <div class="text">
+		  <p>The best tutorial, solved my problems, my pain killer indeed! Thanks!!!</p>
+	  </div>
+	  
+	  
+      <div class="reply">
+         <a rel='nofollow' class='comment-reply-link' href='http://www.binarytides.com/install-postfix-dovecot-debian/?replytocom=67803#respond' onclick='return addComment.moveForm( "comment-67803", "67803", "respond", "7426" )' aria-label='Reply to Talisman'>Reply</a>      </div>
+     </div>
+</li><!-- #comment-## -->
+   <li class="comment odd alt thread-odd thread-alt depth-1 clearfix" id="li-comment-67791">
+	 <img alt='' src='http://1.gravatar.com/avatar/daeecb98981c2b091d944cc63863a6b5?s=38&#038;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&#038;r=g' srcset='http://1.gravatar.com/avatar/daeecb98981c2b091d944cc63863a6b5?s=76&amp;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&amp;r=g 2x' class='avatar avatar-38 photo' height='38' width='38' />     <div id="comment-67791">
+	  <div class="comment-meta commentmetadata clearfix">
+	    <strong>helloworld</strong> <span>February 7, 2015 at 8:24 pm	  </span>
+	  </div>
+	  
+      <div class="text">
+		  <p>Revelation, the best tutorial<br />
+needed only antysmpam</p>
+	  </div>
+	  
+	  
+      <div class="reply">
+         <a rel='nofollow' class='comment-reply-link' href='http://www.binarytides.com/install-postfix-dovecot-debian/?replytocom=67791#respond' onclick='return addComment.moveForm( "comment-67791", "67791", "respond", "7426" )' aria-label='Reply to helloworld'>Reply</a>      </div>
+     </div>
+</li><!-- #comment-## -->
+   <li class="comment even thread-even depth-1 clearfix" id="li-comment-67735">
+	 <img alt='' src='http://2.gravatar.com/avatar/e23f2767e6907e798da5b28694a2bf28?s=38&#038;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&#038;r=g' srcset='http://2.gravatar.com/avatar/e23f2767e6907e798da5b28694a2bf28?s=76&amp;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&amp;r=g 2x' class='avatar avatar-38 photo' height='38' width='38' />     <div id="comment-67735">
+	  <div class="comment-meta commentmetadata clearfix">
+	    <strong><a href="http://www.binarytides.com/"  rel='external nofollow' class='url'>Silver Moon</a></strong> <span>January 12, 2015 at 6:16 pm	  </span>
+	  </div>
+	  
+      <div class="text">
+		  <p>thanks for the link. it covers almost everything needed for a perfect mail server.</p>
+	  </div>
+	  
+	  
+      <div class="reply">
+         <a rel='nofollow' class='comment-reply-link' href='http://www.binarytides.com/install-postfix-dovecot-debian/?replytocom=67735#respond' onclick='return addComment.moveForm( "comment-67735", "67735", "respond", "7426" )' aria-label='Reply to Silver Moon'>Reply</a>      </div>
+     </div>
+</li><!-- #comment-## -->
+   <li class="comment odd alt thread-odd thread-alt depth-1 clearfix" id="li-comment-67685">
+	 <img alt='' src='http://1.gravatar.com/avatar/1c3e1ffd653d6108807f51cecb4473ef?s=38&#038;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&#038;r=g' srcset='http://1.gravatar.com/avatar/1c3e1ffd653d6108807f51cecb4473ef?s=76&amp;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&amp;r=g 2x' class='avatar avatar-38 photo' height='38' width='38' />     <div id="comment-67685">
+	  <div class="comment-meta commentmetadata clearfix">
+	    <strong>cybernard</strong> <span>December 18, 2014 at 7:14 am	  </span>
+	  </div>
+	  
+      <div class="text">
+		  <p>this setup does not include anti-virus or anti-spam,white/gray lists or any of the other important things.</p>
+	  </div>
+	  
+	  
+      <div class="reply">
+         <a rel='nofollow' class='comment-reply-link' href='http://www.binarytides.com/install-postfix-dovecot-debian/?replytocom=67685#respond' onclick='return addComment.moveForm( "comment-67685", "67685", "respond", "7426" )' aria-label='Reply to cybernard'>Reply</a>      </div>
+     </div>
+<ul class="children">
+   <li class="comment even depth-2 clearfix" id="li-comment-67686">
+	 <img alt='' src='http://2.gravatar.com/avatar/e23f2767e6907e798da5b28694a2bf28?s=38&#038;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&#038;r=g' srcset='http://2.gravatar.com/avatar/e23f2767e6907e798da5b28694a2bf28?s=76&amp;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2F61a58ec1c1fba116f8424035089b7c71%3Fs%3D32%26d%3D%26r%3DG&amp;r=g 2x' class='avatar avatar-38 photo' height='38' width='38' />     <div id="comment-67686">
+	  <div class="comment-meta commentmetadata clearfix">
+	    <strong><a href="http://www.binarytides.com/"  rel='external nofollow' class='url'>Silver Moon</a></strong> <span>December 18, 2014 at 2:35 pm	  </span>
+	  </div>
+	  
+      <div class="text">
+		  <p>yes, those would be covered in upcoming articles.</p>
+	  </div>
+	  
+	  
+      <div class="reply">
+         <a rel='nofollow' class='comment-reply-link' href='http://www.binarytides.com/install-postfix-dovecot-debian/?replytocom=67686#respond' onclick='return addComment.moveForm( "comment-67686", "67686", "respond", "7426" )' aria-label='Reply to Silver Moon'>Reply</a>      </div>
+     </div>
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	</ul>
+<div style="height:30px;">
+<span style="float:left;">	
+ 
+</span>
+
+<span style="float:right;">	
+</span>
+</div>
+ 
+
+
+<div id="respond">
+
+<h2 id="commentsForm">Leave a comment</h2>
+
+<div class="cancel-comment-reply">
+	<small><a rel="nofollow" id="cancel-comment-reply-link" href="/install-postfix-dovecot-debian/#respond" style="display:none;">Click here to cancel reply.</a></small>
+</div>
+
+
+<form action="http://www.binarytides.com/blog/wp-comments-post.php" method="post" id="commentform">
+
+
+<p><label for="author">Name (required)</label>
+<input type="text" name="author" id="author" value="" size="22" tabindex="1" aria-required='true' />
+</p>
+
+<p><label for="email">Mail (will not be published) (required)</label>
+<input type="text" name="email" id="email" value="" size="22" tabindex="2" aria-required='true' />
+</p>
+
+<p><label for="url">Website</label>
+<input type="text" name="url" id="url" value="" size="22" tabindex="3" />
+</p>
+
+
+<!--<p><small><strong>XHTML:</strong> You can use these tags: <code>&lt;a href=&quot;&quot; title=&quot;&quot;&gt; &lt;abbr title=&quot;&quot;&gt; &lt;acronym title=&quot;&quot;&gt; &lt;b&gt; &lt;blockquote cite=&quot;&quot;&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=&quot;&quot;&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=&quot;&quot;&gt; &lt;s&gt; &lt;strike&gt; &lt;strong&gt; </code></small></p>-->
+
+<p><label for="comment">Comment</label>
+<textarea name="comment" id="comment" cols="100%" rows="10" tabindex="4"></textarea></p>
+
+<p><input name="submit" type="submit" id="submit" tabindex="5" value="POST COMMENT" />
+<input type='hidden' name='comment_post_ID' value='7426' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p>
+<p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="133"/></p>
+</form>
+
+</div>
+
+			</div>
+			</div>
+
+		</div>
+				
+		</div>
+		<!-- End #colLeftInner -->
+		</div>
+		<!-- End #colLeft -->
+
+<!-- Begin #colRight -->
+<div id="colRight">
+	
+	<div id="adsense_search" class="rightBox">
+<div class="widget_content">
+<form action="http://www.binarytides.com/search" id="cse-search-box">
+  <div>
+    <input type="hidden" name="cx" value="partner-pub-5814774904969415:4586881861" />
+    <input type="hidden" name="cof" value="FORID:10" />
+    <input type="hidden" name="ie" value="UTF-8" />
+<table><tr><td>
+    <input type="text" name="q" size="55" /></td><td>
+    <input type="submit" name="sa" value="Search" /></td></tr></table>
+  </div>
+</form>
+<script type="text/javascript" src="http://www.google.com/coop/cse/brand?form=cse-search-box&lang=en"></script>
+
+</div></div>
+<!-- search box ends here -->
+<center>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- binarytides 300x250 sidebar -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-5814774904969415"
+     data-ad-slot="7101063767"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</center>
+<br /><center>
+<a target="_blank" href="http://feedburner.google.com/fb/a/mailverify?uri=binarytides&loc=en_US" style="display:block;"><img src="http://www.binarytides.com/free-linux-ebooks.png" /></a>
+</center>
+<br /><div class="rightBox"><span class="title">Connect with us</span><div class="widget_content"><ul class="lsi-social-icons icon-set-lsi_widget-2" style="text-align: left"><li class="lsi-social-facebook"><a class="tooltip" rel="nofollow" title="Facebook" aria-label="Facebook" href="https://www.facebook.com/binarytides" target="_blank"><i class="lsicon lsicon-facebook"></i></a></li><li class="lsi-social-twitter"><a class="tooltip" rel="nofollow" title="Twitter" aria-label="Twitter" href="https://twitter.com/binarytides" target="_blank"><i class="lsicon lsicon-twitter"></i></a></li><li class="lsi-social-gplus"><a class="tooltip" rel="nofollow" title="Google+" aria-label="Google+" href="https://plus.google.com/+binarytides" target="_blank"><i class="lsicon lsicon-gplus"></i></a></li><li class="lsi-social-rss"><a class="tooltip" rel="nofollow" title="RSS" aria-label="RSS" href="https://feedburner.google.com/fb/a/mailverify?uri=binarytides" target="_blank"><i class="lsicon lsicon-rss"></i></a></li></ul></div></div><div class="rightBox">
+<div class="wp_rp_wrap  wp_rp_modern" id="wp_rp_first"><div class="wp_rp_content"><span class="title">Other interesting stuff</span><div class="widget_content"><ul class="related_post wp_rp"><li data-position="0" data-poid="in-6809" data-post-type="none" ><a href="http://www.binarytides.com/postfix-mail-forwarding-debian/" class="wp_rp_thumbnail"><img src="http://www.binarytides.com/blog/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/5.jpg" alt="Setup mail forwarding in postfix on Ubuntu or Debian" width="150" height="150" /></a><a href="http://www.binarytides.com/postfix-mail-forwarding-debian/" class="wp_rp_title">Setup mail forwarding in postfix on Ubuntu or Debian</a></li><li data-position="1" data-poid="in-7467" data-post-type="none" ><a href="http://www.binarytides.com/linux-mailx-command/" class="wp_rp_thumbnail"><img src="http://www.binarytides.com/blog/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/0.jpg" alt="9 mail/mailx command examples to send emails from command line on Linux" width="150" height="150" /></a><a href="http://www.binarytides.com/linux-mailx-command/" class="wp_rp_title">9 mail/mailx command examples to send emails from command line on Linux</a></li><li data-position="2" data-poid="in-7682" data-post-type="none" ><a href="http://www.binarytides.com/install-wxwidgets-ubuntu/" class="wp_rp_thumbnail"><img src="http://www.binarytides.com/blog/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/1.jpg" alt="How to compile and install wxWidgets on Ubuntu/Debian/Linux Mint" width="150" height="150" /></a><a href="http://www.binarytides.com/install-wxwidgets-ubuntu/" class="wp_rp_title">How to compile and install wxWidgets on Ubuntu/Debian/Linux Mint</a></li><li data-position="3" data-poid="in-7461" data-post-type="none" ><a href="http://www.binarytides.com/install-monit-debian/" class="wp_rp_thumbnail"><img src="http://www.binarytides.com/blog/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/10.jpg" alt="Install Monit (process and service monitoring tool) on Ubuntu/Debian" width="150" height="150" /></a><a href="http://www.binarytides.com/install-monit-debian/" class="wp_rp_title">Install Monit (process and service monitoring tool) on Ubuntu/Debian</a></li><li data-position="4" data-poid="in-6328" data-post-type="none" ><a href="http://www.binarytides.com/install-virtualbox-4-3-ubuntu/" class="wp_rp_thumbnail"><img src="http://www.binarytides.com/blog/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/9.jpg" alt="Install Virtualbox 4.3 on Ubuntu / Debian / Fedora" width="150" height="150" /></a><a href="http://www.binarytides.com/install-virtualbox-4-3-ubuntu/" class="wp_rp_title">Install Virtualbox 4.3 on Ubuntu / Debian / Fedora</a></li><li data-position="5" data-poid="in-5381" data-post-type="none" ><a href="http://www.binarytides.com/setup-apache-php-cgi-ubuntu/" class="wp_rp_thumbnail"><img src="http://www.binarytides.com/blog/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/28.jpg" alt="Install and configure Apache and PHP with cgi on Ubuntu or Debian" width="150" height="150" /></a><a href="http://www.binarytides.com/setup-apache-php-cgi-ubuntu/" class="wp_rp_title">Install and configure Apache and PHP with cgi on Ubuntu or Debian</a></li></ul></div></div>
+</div></div><center>
+<!-- BEGIN IFRAME TAG - binarytides.com RON Global Display Rev Share < - DO NOT MODIFY -->
+<IFRAME SRC="http://ads.cpxinteractive.com/tt?id=2151978&size=300x250&referrer=binarytides.com" FRAMEBORDER="0" SCROLLING="no" MARGINHEIGHT="0" MARGINWIDTH="0" TOPMARGIN="0" LEFTMARGIN="0" ALLOWTRANSPARENCY="true" WIDTH="300" HEIGHT="250"></IFRAME>
+<!-- END TAG -->
+</center>
+</div>
+<!-- End #colRight -->	
+
+</div>
+<!-- end of colwrap -->
+
+</div>
+		<!-- end content -->
+	
+	</div>
+	<!-- end wrapper -->
+	<!-- begin footer -->
+	
+	<div id="footer">
+		<div id="copyrightInner">
+
+<div style="line-height:32px;">			
+
+<div id="footer_links">
+	<a href="/about">About us</a>
+	<a href="/contact">Contact us</a>
+	<a href="/faq">Faq</a>
+	<a href="/advertise">Advertise</a>
+	<a href="/privacy">Privacy Policy</a>
+<!--	<a href="/terms">Terms of Service</a>-->
+</div>
+
+Copyright &copy; 2017 BinaryTides
+
+</div>
+		
+
+		</div>
+
+
+
+	</div>
+	<!-- end footer -->
+
+	
+
+<!-- google analytics event tracking -->
+<script type="text/javascript">
+
+if(window.jQuery)
+{
+
+jQuery(document).ready(function() {
+
+jQuery('li.SPOSTARBUST-Related-Post a').click(function() 
+{ 
+	ga('send', 'event', 'clicks', 'related_posts_right', $(this).html(), {'nonInteraction': 1});
+});
+	
+//For adverts and offers, save the href/link
+jQuery('a.offer').click(function() 
+{ 
+//	_gaq.push(['_trackEvent', 'clicks', 'offer', $(this).attr('href') , 5, true]);
+});
+
+jQuery('.postBoxMidInner p img').closest('p').css('clear','both');
+
+
+// detect ad blocking
+if( jQuery('.adcontent').height() == 0 )
+{
+	// console.log('Sad. You have ad blocker enabled');
+	ga('send', 'event', 'adblocks', 'adblocks', 'adblocks', {'nonInteraction': 1});
+
+	// add some content to the empty ad area
+}
+});
+
+}
+
+</script>
+
+
+
+<!-- Quantcast Tag -->
+<script type="text/javascript">
+var _qevents = _qevents || [];
+
+(function() {
+var elem = document.createElement('script');
+elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";
+elem.async = true;
+elem.type = "text/javascript";
+var scpt = document.getElementsByTagName('script')[0];
+scpt.parentNode.insertBefore(elem, scpt);
+})();
+
+_qevents.push({
+qacct:"p-PydpEyknvJJzJ"
+});
+</script>
+
+<noscript>
+<div style="display:none;">
+<img src="//pixel.quantserve.com/pixel/p-PydpEyknvJJzJ.gif" border="0" height="1" width="1" alt="Quantcast"/>
+</div>
+</noscript>
+<!-- End Quantcast tag --><script type='text/javascript' src='http://www.binarytides.com/blog/wp-content/plugins/akismet/_inc/form.js?ver=3.2'></script>
+<link rel='stylesheet' id='yarppRelatedCss-css'  href='http://www.binarytides.com/blog/wp-content/plugins/yet-another-related-posts-plugin/style/related.css?ver=4.7.4' type='text/css' media='all' />
+<link rel='stylesheet' id='lsi-style-css'  href='http://www.binarytides.com/blog/wp-content/plugins/lightweight-social-icons/css/style-min.css?ver=0.9' type='text/css' media='all' />
+<style id='lsi-style-inline-css' type='text/css'>
+
+			.icon-set-lsi_widget-2 a, 
+			.icon-set-lsi_widget-2 a:visited, 
+			.icon-set-lsi_widget-2 a:focus {
+				border-radius: 2px;
+				background: #1E72BD !important;
+				color: #FFFFFF !important;
+				font-size: 32px !important;
+			}
+			.icon-set-lsi_widget-2 a:hover {
+				background: #dd3333 !important;
+				color: #FFFFFF !important;
+			}
+</style>
+<script type='text/javascript' src='http://www.binarytides.com/blog/wp-includes/js/wp-embed.min.js?ver=4.7.4'></script>
+<script type='text/javascript' src='http://www.binarytides.com/blog/wp-content/plugins/lightweight-social-icons/js/jquery.tooltipster.min.js?ver=0.9'></script>
+<script>/* <![CDATA[ */(function(d,s,a,i,j,r,l,m,t){try{l=d.getElementsByTagName('a');t=d.createElement('textarea');for(i=0;l.length-i;i++){try{a=l[i].href;s=a.indexOf('/cdn-cgi/l/email-protection');m=a.length;if(a&&s>-1&&m>28){j=28+s;s='';if(j<m){r='0x'+a.substr(j,2)|0;for(j+=2;j<m&&a.charAt(j)!='X';j+=2)s+='%'+('0'+('0x'+a.substr(j,2)^r).toString(16)).slice(-2);j++;s=decodeURIComponent(s)+a.substr(j,m-j)}t.innerHTML=s.replace(/</g,'&lt;').replace(/\>/g,'&gt;');l[i].href='mailto:'+t.value}}catch(e){}}}catch(e){}})(document);/* ]]> */</script></body>
+</html>
+<!-- *´¨)
+     ¸.•´¸.•*´¨) ¸.•*¨)
+     (¸.•´ (¸.•` ¤ Comet Cache is Fully Functional ¤ ´¨) -->
+
+<!-- Cache File Version Salt:       n/a -->
+
+<!-- Cache File URL:                http://www.binarytides.com/install-postfix-dovecot-debian/ -->
+<!-- Cache File Path:               /cache/comet-cache/cache/http/www-binarytides-com/install-postfix-dovecot-debian.html -->
+
+<!-- Cache File Generated Via:      HTTP request -->
+<!-- Cache File Generated On:       May 4th, 2017 @ 7:13 pm UTC -->
+<!-- Cache File Generated In:       0.28950 seconds -->
+
+<!-- Cache File Expires On:         May 11th, 2017 @ 7:13 pm UTC -->
+<!-- Cache File Auto-Rebuild On:    May 11th, 2017 @ 7:13 pm UTC -->
+
+<!-- Loaded via Cache On:    May 7th, 2017 @ 1:56 pm UTC -->
+<!-- Loaded via Cache In:    0.01885 seconds -->
